@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 import { useLocation } from 'react-router-dom';
 import { Send, User, Plus, X } from 'lucide-react';
@@ -42,7 +42,7 @@ const Chat = () => {
     const fetchConversations = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get('http://localhost:5001/api/messages/conversations', {
+            const res = await api.get('/messages/conversations', {
                 headers: { 'x-auth-token': token }
             });
             setConversations(res.data);
@@ -54,7 +54,7 @@ const Chat = () => {
     const fetchMessages = async (userId) => {
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get(`http://localhost:5001/api/messages/${userId}`, {
+            const res = await api.get(`/messages/${userId}`, {
                 headers: { 'x-auth-token': token }
             });
             setMessages(res.data);
@@ -66,7 +66,7 @@ const Chat = () => {
     const fetchUsers = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get('http://localhost:5001/api/users', {
+            const res = await api.get('/users', {
                 headers: { 'x-auth-token': token }
             });
             setAvailableUsers(res.data);
@@ -90,7 +90,7 @@ const Chat = () => {
 
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.post('http://localhost:5001/api/messages', {
+            const res = await api.post('/messages', {
                 recipientId: activeChat._id,
                 content: newMessage
             }, {

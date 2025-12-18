@@ -1,5 +1,4 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 
 const AuthContext = createContext();
 
@@ -18,7 +17,7 @@ export const AuthProvider = ({ children }) => {
                 try {
                     // Set auth header for all axios requests (optional but good practice, or just pass in header)
                     // For this simple app, we'll just pass it in this request or assuming global header is not set yet.
-                    const res = await axios.get('http://localhost:5001/api/auth/me', {
+                    const res = await api.get('/auth/me', {
                         headers: { 'x-auth-token': storedToken }
                     });
                     setUser(res.data);
@@ -36,7 +35,7 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (email, password) => {
         try {
-            const res = await axios.post('http://localhost:5001/api/auth/login', { email, password });
+            const res = await api.post('/auth/login', { email, password });
             localStorage.setItem('token', res.data.token);
             setToken(res.data.token);
             setUser(res.data.user);
@@ -48,7 +47,7 @@ export const AuthProvider = ({ children }) => {
 
     const register = async (name, email, password, role) => {
         try {
-            const res = await axios.post('http://localhost:5001/api/auth/register', { name, email, password, role });
+            const res = await api.post('/auth/register', { name, email, password, role });
             localStorage.setItem('token', res.data.token);
             setToken(res.data.token);
             setUser(res.data.user);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 import { Link } from 'react-router-dom';
 import { MapPin, Search, Calendar, Smile, ArrowRight, ClipboardList, TrendingUp, Users, Clock, CheckCircle, Star } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
@@ -23,7 +23,7 @@ const Home = () => {
 
             if (user?.role === 'provider') {
                 try {
-                    const res = await axios.get('http://localhost:5001/api/bookings', {
+                    const res = await api.get('/bookings', {
                         headers: { 'x-auth-token': localStorage.getItem('token') }
                     });
                     const bookings = res.data;
@@ -47,7 +47,7 @@ const Home = () => {
                 // Fetch Customer Bookings if logged in
                 if (user?.role === 'customer') {
                     try {
-                        const res = await axios.get('http://localhost:5001/api/bookings', {
+                        const res = await api.get('/bookings', {
                             headers: { 'x-auth-token': localStorage.getItem('token') }
                         });
                         setCustomerBookings(res.data);
@@ -63,7 +63,7 @@ const Home = () => {
 
     const fetchServices = async (search = '', location = '') => {
         try {
-            const res = await axios.get(`http://localhost:5001/api/services?search=${search}&location=${location}`);
+            const res = await api.get(`/services?search=${search}&location=${location}`);
             setServices(res.data);
         } catch (error) {
             console.error('Error fetching services:', error);

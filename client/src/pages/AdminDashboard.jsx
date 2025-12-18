@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -37,7 +37,7 @@ const AdminDashboard = () => {
     const fetchStats = async () => {
         try {
             setError(null);
-            const res = await axios.get('http://localhost:5001/api/admin/stats', {
+            const res = await api.get('/admin/stats', {
                 headers: { 'x-auth-token': token }
             });
             setStats(res.data);
@@ -51,7 +51,7 @@ const AdminDashboard = () => {
 
     const fetchUsers = async () => {
         try {
-            const res = await axios.get('http://localhost:5001/api/admin/users', {
+            const res = await api.get('/admin/users', {
                 headers: { 'x-auth-token': token }
             });
             setUsers(res.data);
@@ -62,7 +62,7 @@ const AdminDashboard = () => {
 
     const fetchCategories = async () => {
         try {
-            const res = await axios.get('http://localhost:5001/api/categories', {
+            const res = await api.get('/categories', {
                 headers: { 'x-auth-token': token }
             });
             setCategories(res.data);
@@ -73,7 +73,7 @@ const AdminDashboard = () => {
 
     const fetchDisputes = async () => {
         try {
-            const res = await axios.get('http://localhost:5001/api/disputes', {
+            const res = await api.get('/disputes', {
                 headers: { 'x-auth-token': token }
             });
             setDisputes(res.data);
@@ -84,7 +84,7 @@ const AdminDashboard = () => {
 
     const toggleVerifyUser = async (id) => {
         try {
-            await axios.put(`http://localhost:5001/api/admin/users/${id}/verify`, {}, {
+            await api.put(`/admin/users/${id}/verify`, {}, {
                 headers: { 'x-auth-token': token }
             });
             fetchUsers();
@@ -96,7 +96,7 @@ const AdminDashboard = () => {
     const deleteUser = async (id) => {
         if (!window.confirm('Are you sure you want to delete this user?')) return;
         try {
-            await axios.delete(`http://localhost:5001/api/admin/users/${id}`, {
+            await api.delete(`/admin/users/${id}`, {
                 headers: { 'x-auth-token': token }
             });
             fetchUsers();
@@ -108,7 +108,7 @@ const AdminDashboard = () => {
     const addCategory = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:5001/api/categories', { name: newCategory }, {
+            await api.post('/categories', { name: newCategory }, {
                 headers: { 'x-auth-token': token }
             });
             setNewCategory('');
@@ -122,7 +122,7 @@ const AdminDashboard = () => {
     const deleteCategory = async (id) => {
         if (!window.confirm('Delete this category?')) return;
         try {
-            await axios.delete(`http://localhost:5001/api/categories/${id}`, {
+            await api.delete(`/categories/${id}`, {
                 headers: { 'x-auth-token': token }
             });
             fetchCategories();
@@ -133,7 +133,7 @@ const AdminDashboard = () => {
 
     const resolveDispute = async (id) => {
         try {
-            await axios.put(`http://localhost:5001/api/disputes/${id}/status`, { status: 'resolved' }, {
+            await api.put(`/disputes/${id}/status`, { status: 'resolved' }, {
                 headers: { 'x-auth-token': token }
             });
             fetchDisputes();

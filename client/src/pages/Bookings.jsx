@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { MessageSquare, Check, X, DollarSign } from 'lucide-react';
@@ -18,7 +18,7 @@ const Bookings = () => {
                         'x-auth-token': token
                     }
                 };
-                const res = await axios.get('http://localhost:5001/api/bookings', config);
+                const res = await api.get('/bookings', config);
                 setBookings(res.data);
             } catch (error) {
                 console.error('Error fetching bookings:', error);
@@ -31,7 +31,7 @@ const Bookings = () => {
         try {
             const token = localStorage.getItem('token');
             const config = { headers: { 'x-auth-token': token } };
-            const res = await axios.patch(`http://localhost:5001/api/bookings/${bookingId}/status`, { status }, config);
+            const res = await api.patch(`/bookings/${bookingId}/status`, { status }, config);
 
             // Update local state
             setBookings(bookings.map(b => b._id === bookingId ? res.data : b));
@@ -45,7 +45,7 @@ const Bookings = () => {
         try {
             const token = localStorage.getItem('token');
             const config = { headers: { 'x-auth-token': token } };
-            const res = await axios.patch(`http://localhost:5001/api/bookings/${bookingId}/pay`, {}, config);
+            const res = await api.patch(`/bookings/${bookingId}/pay`, {}, config);
 
             // Update local state
             setBookings(bookings.map(b => b._id === bookingId ? res.data : b));

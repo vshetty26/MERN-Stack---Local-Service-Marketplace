@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { MapPin, DollarSign, Calendar, Clock, Star, MessageCircle } from 'lucide-react';
@@ -16,7 +16,7 @@ const ServiceDetails = () => {
     useEffect(() => {
         const fetchService = async () => {
             try {
-                const res = await axios.get(`http://localhost:5001/api/services/${id}`);
+                const res = await api.get(`/services/${id}`);
                 setService(res.data);
             } catch (error) {
                 console.error('Error fetching service:', error);
@@ -25,7 +25,7 @@ const ServiceDetails = () => {
 
         const fetchReviews = async () => {
             try {
-                const res = await axios.get(`http://localhost:5001/api/reviews/${id}`);
+                const res = await api.get(`/reviews/${id}`);
                 setReviews(res.data);
             } catch (error) {
                 console.error('Error fetching reviews:', error);
@@ -41,7 +41,7 @@ const ServiceDetails = () => {
         try {
             const token = localStorage.getItem('token');
             const config = { headers: { 'x-auth-token': token } };
-            const res = await axios.post('http://localhost:5001/api/reviews', {
+            const res = await api.post('/reviews', {
                 serviceId: id,
                 rating: newReview.rating,
                 comment: newReview.comment
@@ -70,7 +70,7 @@ const ServiceDetails = () => {
                     'x-auth-token': token
                 }
             };
-            await axios.post('http://localhost:5001/api/bookings', { serviceId: id, date: bookingDate }, config);
+            await api.post('/bookings', { serviceId: id, date: bookingDate }, config);
             alert('Booking successful!');
             navigate('/bookings');
         } catch (error) {

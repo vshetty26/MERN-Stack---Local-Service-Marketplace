@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 import { Plus, Trash2 } from 'lucide-react';
 
@@ -21,7 +21,7 @@ const MyServices = () => {
             // or filtered on client side from all services if small scale.
             // For now, let's fetch all and filter by provider user.id
             try {
-                const res = await axios.get('http://localhost:5001/api/services');
+                const res = await api.get('/services');
                 if (user) {
                     const myServices = res.data.filter(s => s.provider._id === user.id || s.provider === user.id);
                     setServices(myServices);
@@ -40,7 +40,7 @@ const MyServices = () => {
             const config = { headers: { 'x-auth-token': token } };
             const newService = { title, description, category, price, location };
 
-            const res = await axios.post('http://localhost:5001/api/services', newService, config);
+            const res = await api.post('/services', newService, config);
             setServices([...services, res.data]);
             setShowForm(false);
             // Reset form
